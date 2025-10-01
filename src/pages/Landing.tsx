@@ -52,19 +52,19 @@ const Landing = () => {
               <Button 
                 size="lg" 
                 className="text-lg px-8 py-6 bg-primary hover:bg-primary/90 text-primary-foreground group"
-                onClick={() => navigate('/teacher-dashboard')}
+                onClick={() => navigate('/auth')}
               >
                 <TrendingUp className="mr-2 w-5 h-5 group-hover:scale-110 transition-transform" />
-                I am a Teacher
+                Get Started
               </Button>
               <Button 
                 size="lg" 
                 variant="outline"
                 className="text-lg px-8 py-6 border-2 border-primary/50 hover:bg-primary/10 group"
-                onClick={() => navigate('/student-dashboard')}
+                onClick={() => navigate('/auth')}
               >
                 <Code2 className="mr-2 w-5 h-5 group-hover:scale-110 transition-transform" />
-                I am a Student
+                Sign In
               </Button>
             </div>
           </div>
