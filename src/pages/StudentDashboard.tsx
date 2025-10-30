@@ -33,6 +33,64 @@ const StudentDashboard = () => {
       </header>
 
       <div className="container mx-auto px-6 py-8 space-y-6">
+        {/* Assigned Tasks */}
+        <Card className="glass-card border-primary/30 bg-primary/5 animate-fade-in">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Target className="w-5 h-5 text-primary" />
+              Assigned Tasks
+            </CardTitle>
+            <CardDescription>Tasks assigned by your teacher</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {assignedTasks.map((task, index) => (
+                <div 
+                  key={index} 
+                  className="p-4 rounded-lg border border-border/50 bg-card/50 hover:border-primary/50 transition-all"
+                >
+                  <div className="flex items-start justify-between mb-2">
+                    <div className="flex-1">
+                      <h4 className="font-medium">{task.title}</h4>
+                      <p className="text-sm text-muted-foreground mt-1">{task.description}</p>
+                    </div>
+                    <span className={`px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap ml-4 ${
+                      task.status === 'completed' 
+                        ? 'bg-secondary/20 text-secondary border border-secondary/30' 
+                        : task.status === 'in-progress'
+                        ? 'bg-primary/20 text-primary border border-primary/30'
+                        : 'bg-muted text-muted-foreground border border-border'
+                    }`}>
+                      {task.status === 'completed' ? 'Completed' : 
+                       task.status === 'in-progress' ? 'In Progress' : 
+                       'Not Started'}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-muted-foreground">Due: {task.dueDate}</span>
+                    {task.status === 'not-started' && (
+                      <Button size="sm" className="bg-primary hover:bg-primary/90">
+                        Start Task
+                      </Button>
+                    )}
+                    {task.status === 'in-progress' && (
+                      <Button size="sm" variant="outline">
+                        Continue
+                      </Button>
+                    )}
+                    {task.status === 'completed' && (
+                      <span className="text-secondary text-sm flex items-center gap-1">
+                        <Trophy className="w-4 h-4" />
+                        Completed
+                      </span>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {stats.map((stat, index) => (
@@ -140,6 +198,27 @@ const StudentDashboard = () => {
     </div>
   );
 };
+
+const assignedTasks = [
+  {
+    title: "Build E-Commerce REST API",
+    description: "Create a RESTful API with authentication, product management, and order processing",
+    dueDate: "Dec 20, 2024",
+    status: "in-progress"
+  },
+  {
+    title: "Implement Microservices Architecture",
+    description: "Design and implement a microservices system with at least 5 services",
+    dueDate: "Dec 15, 2024",
+    status: "not-started"
+  },
+  {
+    title: "Write Unit Tests",
+    description: "Add comprehensive unit tests for your latest project",
+    dueDate: "Dec 10, 2024",
+    status: "completed"
+  },
+];
 
 const stats = [
   { icon: GitCommit, label: "Total Commits", value: "342", trend: "+12 this week" },

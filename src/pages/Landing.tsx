@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import { GitBranch, Code2, TrendingUp, Zap } from "lucide-react";
 
@@ -47,25 +48,37 @@ const Landing = () => {
               Bridge the gap between code commits and curriculum outcomes with AI-powered precision.
             </p>
 
-            {/* Role Selection */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-8">
-              <Button 
-                size="lg" 
-                className="text-lg px-8 py-6 bg-primary hover:bg-primary/90 text-primary-foreground group"
-                onClick={() => navigate('/auth')}
-              >
-                <TrendingUp className="mr-2 w-5 h-5 group-hover:scale-110 transition-transform" />
-                Get Started
-              </Button>
-              <Button 
-                size="lg" 
-                variant="outline"
-                className="text-lg px-8 py-6 border-2 border-primary/50 hover:bg-primary/10 group"
-                onClick={() => navigate('/auth')}
-              >
-                <Code2 className="mr-2 w-5 h-5 group-hover:scale-110 transition-transform" />
-                Sign In
-              </Button>
+            {/* Role Selection Boxes */}
+            <div className="grid md:grid-cols-2 gap-6 pt-8 max-w-3xl mx-auto">
+              <Card className="glass-card hover:scale-105 transition-transform duration-300 cursor-pointer group" onClick={() => navigate('/auth')}>
+                <CardContent className="pt-8 pb-8 text-center">
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center mb-4 mx-auto group-hover:scale-110 transition-transform">
+                    <TrendingUp className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold mb-2">I'm a Teacher</h3>
+                  <p className="text-muted-foreground mb-4">
+                    Monitor batch progress, assign tasks, and track student learning journeys
+                  </p>
+                  <Button className="w-full bg-primary hover:bg-primary/90">
+                    Get Started as Teacher
+                  </Button>
+                </CardContent>
+              </Card>
+
+              <Card className="glass-card hover:scale-105 transition-transform duration-300 cursor-pointer group" onClick={() => navigate('/auth')}>
+                <CardContent className="pt-8 pb-8 text-center">
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-secondary to-accent flex items-center justify-center mb-4 mx-auto group-hover:scale-110 transition-transform">
+                    <Code2 className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold mb-2">I'm a Student</h3>
+                  <p className="text-muted-foreground mb-4">
+                    Track your commits, get AI feedback, and visualize your coding growth
+                  </p>
+                  <Button className="w-full bg-secondary hover:bg-secondary/90">
+                    Get Started as Student
+                  </Button>
+                </CardContent>
+              </Card>
             </div>
           </div>
 

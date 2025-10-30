@@ -22,10 +22,21 @@ const TeacherDashboard = () => {
               <p className="text-sm text-muted-foreground">Batch 3A - Full Stack Development</p>
             </div>
           </div>
-          <Button className="bg-primary hover:bg-primary/90">
-            <GitBranch className="mr-2 w-4 h-4" />
-            View All Batches
-          </Button>
+          <div className="flex gap-2">
+            <Button 
+              className="bg-primary hover:bg-primary/90"
+              onClick={() => navigate('/batches')}
+            >
+              <GitBranch className="mr-2 w-4 h-4" />
+              View All Batches
+            </Button>
+            <Button 
+              variant="outline"
+              onClick={() => navigate('/task-assignment')}
+            >
+              Assign Tasks
+            </Button>
+          </div>
         </div>
       </header>
 
