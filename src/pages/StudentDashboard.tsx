@@ -1,13 +1,25 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, GitCommit, Trophy, TrendingUp, Target, Calendar } from "lucide-react";
+import { ArrowLeft, GitCommit, Trophy, TrendingUp, Target, Calendar, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { RadarChart } from "@/components/dashboard/RadarChart";
 import { LearningTimeline } from "@/components/dashboard/LearningTimeline";
 import { CommitHeatmap } from "@/components/dashboard/CommitHeatmap";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const StudentDashboard = () => {
   const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut();
+      toast.success("Logged out successfully");
+      navigate('/');
+    } catch (error: any) {
+      toast.error("Failed to logout");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -28,6 +40,9 @@ const StudentDashboard = () => {
               <GitCommit className="w-4 h-4 text-secondary" />
               <span className="text-sm font-medium">24-day streak</span>
             </div>
+            <Button variant="outline" size="icon" onClick={handleLogout}>
+              <LogOut className="w-4 h-4" />
+            </Button>
           </div>
         </div>
       </header>

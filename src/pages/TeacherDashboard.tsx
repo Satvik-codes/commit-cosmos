@@ -1,12 +1,24 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Users, AlertTriangle, TrendingUp, CheckCircle2, Clock, GitBranch } from "lucide-react";
+import { ArrowLeft, Users, AlertTriangle, TrendingUp, CheckCircle2, Clock, GitBranch, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { BatchHealthChart } from "@/components/dashboard/BatchHealthChart";
 import { StudentTable } from "@/components/dashboard/StudentTable";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const TeacherDashboard = () => {
   const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut();
+      toast.success("Logged out successfully");
+      navigate('/');
+    } catch (error: any) {
+      toast.error("Failed to logout");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -35,6 +47,9 @@ const TeacherDashboard = () => {
               onClick={() => navigate('/task-assignment')}
             >
               Assign Tasks
+            </Button>
+            <Button variant="outline" size="icon" onClick={handleLogout}>
+              <LogOut className="w-4 h-4" />
             </Button>
           </div>
         </div>

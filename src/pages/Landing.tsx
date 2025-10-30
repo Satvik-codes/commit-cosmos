@@ -2,9 +2,16 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import { GitBranch, Code2, TrendingUp, Zap } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 const Landing = () => {
   const navigate = useNavigate();
+
+  const handleRoleSelection = async () => {
+    // Logout any existing session before going to auth
+    await supabase.auth.signOut();
+    navigate('/auth');
+  };
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
@@ -50,7 +57,7 @@ const Landing = () => {
 
             {/* Role Selection Boxes */}
             <div className="grid md:grid-cols-2 gap-6 pt-8 max-w-3xl mx-auto">
-              <Card className="glass-card hover:scale-105 transition-transform duration-300 cursor-pointer group" onClick={() => navigate('/auth')}>
+              <Card className="glass-card hover:scale-105 transition-transform duration-300 cursor-pointer group" onClick={handleRoleSelection}>
                 <CardContent className="pt-8 pb-8 text-center">
                   <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center mb-4 mx-auto group-hover:scale-110 transition-transform">
                     <TrendingUp className="w-8 h-8 text-white" />
@@ -65,7 +72,7 @@ const Landing = () => {
                 </CardContent>
               </Card>
 
-              <Card className="glass-card hover:scale-105 transition-transform duration-300 cursor-pointer group" onClick={() => navigate('/auth')}>
+              <Card className="glass-card hover:scale-105 transition-transform duration-300 cursor-pointer group" onClick={handleRoleSelection}>
                 <CardContent className="pt-8 pb-8 text-center">
                   <div className="w-16 h-16 rounded-full bg-gradient-to-br from-secondary to-accent flex items-center justify-center mb-4 mx-auto group-hover:scale-110 transition-transform">
                     <Code2 className="w-8 h-8 text-white" />
