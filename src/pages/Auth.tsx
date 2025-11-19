@@ -11,11 +11,13 @@ import { Loader2, Github } from "lucide-react";
 
 const Auth = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
-  const [role, setRole] = useState<"student" | "teacher">("student");
+  const [role, setRole] = useState<"student" | "teacher">("teacher");
+  const [activeTab, setActiveTab] = useState("teacher");
 
   useEffect(() => {
     // Check if user is already logged in
