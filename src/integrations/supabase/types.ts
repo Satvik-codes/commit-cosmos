@@ -143,6 +143,67 @@ export type Database = {
           },
         ]
       }
+      assignment_submissions: {
+        Row: {
+          assignment_id: string
+          created_at: string | null
+          feedback: string | null
+          grade: number | null
+          id: string
+          repository_id: string | null
+          status: string
+          student_id: string
+          submitted_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          assignment_id: string
+          created_at?: string | null
+          feedback?: string | null
+          grade?: number | null
+          id?: string
+          repository_id?: string | null
+          status?: string
+          student_id: string
+          submitted_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          assignment_id?: string
+          created_at?: string | null
+          feedback?: string | null
+          grade?: number | null
+          id?: string
+          repository_id?: string | null
+          status?: string
+          student_id?: string
+          submitted_at?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assignment_submissions_assignment_id_fkey"
+            columns: ["assignment_id"]
+            isOneToOne: false
+            referencedRelation: "assignments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assignment_submissions_repository_id_fkey"
+            columns: ["repository_id"]
+            isOneToOne: false
+            referencedRelation: "repositories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assignment_submissions_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       assignments: {
         Row: {
           batch_id: string
@@ -411,6 +472,24 @@ export type Database = {
         }
         Relationships: []
       }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
       users: {
         Row: {
           avatar_url: string | null
@@ -418,9 +497,12 @@ export type Database = {
           email: string
           full_name: string | null
           github_access_token: string | null
+          github_avatar_url: string | null
           github_refresh_token: string | null
+          github_repos_count: number | null
           github_username: string | null
           id: string
+          last_github_sync: string | null
           role: Database["public"]["Enums"]["user_role"]
           updated_at: string
         }
@@ -430,9 +512,12 @@ export type Database = {
           email: string
           full_name?: string | null
           github_access_token?: string | null
+          github_avatar_url?: string | null
           github_refresh_token?: string | null
+          github_repos_count?: number | null
           github_username?: string | null
           id: string
+          last_github_sync?: string | null
           role?: Database["public"]["Enums"]["user_role"]
           updated_at?: string
         }
@@ -442,9 +527,12 @@ export type Database = {
           email?: string
           full_name?: string | null
           github_access_token?: string | null
+          github_avatar_url?: string | null
           github_refresh_token?: string | null
+          github_repos_count?: number | null
           github_username?: string | null
           id?: string
+          last_github_sync?: string | null
           role?: Database["public"]["Enums"]["user_role"]
           updated_at?: string
         }
@@ -455,11 +543,18 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
       activity_type: "commit" | "pull_request" | "issue" | "create" | "push"
       analysis_status: "pending" | "processing" | "completed" | "failed"
+      app_role: "teacher" | "student"
       assignment_status: "draft" | "active" | "completed" | "archived"
       user_role: "student" | "teacher" | "admin"
     }
@@ -591,6 +686,7 @@ export const Constants = {
     Enums: {
       activity_type: ["commit", "pull_request", "issue", "create", "push"],
       analysis_status: ["pending", "processing", "completed", "failed"],
+      app_role: ["teacher", "student"],
       assignment_status: ["draft", "active", "completed", "archived"],
       user_role: ["student", "teacher", "admin"],
     },

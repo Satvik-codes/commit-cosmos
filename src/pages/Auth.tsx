@@ -112,6 +112,25 @@ const Auth = () => {
     }
   };
 
+  const handleGitHubLogin = async () => {
+    setLoading(true);
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'github',
+        options: {
+          redirectTo: `${window.location.origin}/student-dashboard`,
+          scopes: 'read:user repo'
+        }
+      });
+
+      if (error) throw error;
+    } catch (error: any) {
+      toast.error(error.message || "Failed to sign in with GitHub");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-background via-background to-muted/20">
       <div className="w-full max-w-md">
@@ -130,13 +149,20 @@ const Auth = () => {
             <CardDescription>Sign in or create a new account to get started</CardDescription>
           </CardHeader>
           <CardContent>
-            <Tabs defaultValue="signin" className="w-full">
+            <Tabs defaultValue={activeTab} className="w-full">
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="signin">Sign In</TabsTrigger>
-                <TabsTrigger value="signup">Sign Up</TabsTrigger>
+                <TabsTrigger value="teacher">Teacher</TabsTrigger>
+                <TabsTrigger value="student">Student</TabsTrigger>
               </TabsList>
 
-              <TabsContent value="signin">
+              <TabsContent value="teacher">
+                <Tabs defaultValue="signin" className="w-full">
+                  <TabsList className="grid w-full grid-cols-2">
+                    <TabsTrigger value="signin">Sign In</TabsTrigger>
+                    <TabsTrigger value="signup">Sign Up</TabsTrigger>
+                  </TabsList>
+
+                  <TabsContent value="signin">
                 <form onSubmit={handleSignIn} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="signin-email">Email</Label>
@@ -167,8 +193,8 @@ const Auth = () => {
                 </form>
               </TabsContent>
 
-              <TabsContent value="signup">
-                <form onSubmit={handleSignUp} className="space-y-4">
+                  <TabsContent value="signup">
+                    <form onSubmit={handleSignUp} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="signup-name">Full Name</Label>
                     <Input
@@ -224,11 +250,33 @@ const Auth = () => {
                       </Button>
                     </div>
                   </div>
-                  <Button type="submit" className="w-full" disabled={loading}>
-                    {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                    Create Account
+                      <Button type="submit" className="w-full" disabled={loading}>
+                        {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                        Create Account
+                      </Button>
+                    </form>
+                  </TabsContent>
+                </Tabs>
+              </TabsContent>
+
+              <TabsContent value="student">
+                <div className="space-y-4 py-4">
+                  <p className="text-sm text-muted-foreground text-center mb-4">
+                    Students sign in with their GitHub account to track their coding progress
+                  </p>
+                  <Button 
+                    onClick={handleGitHubLogin} 
+                    className="w-full" 
+                    disabled={loading}
+                  >
+                    {loading ? (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    ) : (
+                      <Github className="mr-2 h-4 w-4" />
+                    )}
+                    Sign in with GitHub
                   </Button>
-                </form>
+                </div>
               </TabsContent>
             </Tabs>
           </CardContent>
