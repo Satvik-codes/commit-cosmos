@@ -1,36 +1,28 @@
 import { GitCommit, Award, Zap, Star } from "lucide-react";
 
-export const LearningTimeline = () => {
-  const milestones = [
-    {
-      date: "Nov 15, 2024",
-      title: "Project 'E-Commerce API' Completed",
-      description: "Mastered JWT authentication & Stripe integration",
-      icon: Award,
-      color: "text-secondary"
-    },
-    {
-      date: "Nov 1, 2024",
-      title: "Major Refactor - SOLID Principles",
-      description: "Demonstrated understanding of clean architecture",
-      icon: Zap,
-      color: "text-primary"
-    },
-    {
-      date: "Oct 20, 2024",
-      title: "First Pull Request Merged",
-      description: "Contributed to team project with proper Git workflow",
-      icon: GitCommit,
-      color: "text-primary"
-    },
-    {
-      date: "Oct 5, 2024",
-      title: "Microservices Foundation",
-      description: "Successfully deployed first containerized application",
-      icon: Star,
-      color: "text-secondary"
-    }
-  ];
+interface LearningTimelineProps {
+  activities: any[];
+}
+
+export const LearningTimeline = ({ activities = [] }: LearningTimelineProps) => {
+  const milestones = activities
+    .slice(0, 10)
+    .map((activity, index) => {
+      const icons = [GitCommit, Award, Zap, Star];
+      const colors = ["text-primary", "text-secondary", "text-accent"];
+      
+      return {
+        date: new Date(activity.occurred_at).toLocaleDateString(),
+        title: activity.activity_type === 'commit' 
+          ? `Commit: ${activity.commit_message?.substring(0, 50) || 'No message'}`
+          : `${activity.activity_type}: ${activity.metadata?.title || 'Activity'}`,
+        description: activity.activity_type === 'commit'
+          ? `${activity.additions || 0} additions, ${activity.deletions || 0} deletions`
+          : activity.metadata?.state || '',
+        icon: icons[index % icons.length],
+        color: colors[index % colors.length]
+      };
+    });
 
   return (
     <div className="space-y-4 relative">

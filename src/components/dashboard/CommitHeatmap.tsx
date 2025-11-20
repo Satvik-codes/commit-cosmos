@@ -1,20 +1,32 @@
-export const CommitHeatmap = () => {
-  // Generate mock data for the last 12 weeks
+interface CommitHeatmapProps {
+  activities: any[];
+}
+
+export const CommitHeatmap = ({ activities = [] }: CommitHeatmapProps) => {
   const weeks = 12;
   const daysPerWeek = 7;
   
   const generateHeatmapData = () => {
     const data = [];
-    for (let week = 0; week < weeks; week++) {
+    const now = new Date();
+    
+    for (let week = weeks - 1; week >= 0; week--) {
       const weekData = [];
       for (let day = 0; day < daysPerWeek; day++) {
-        // Random commit count (0-10)
-        const commits = Math.floor(Math.random() * 11);
+        const date = new Date(now);
+        date.setDate(date.getDate() - (week * 7 + day));
+        const dateStr = date.toDateString();
+        
+        const commits = activities.filter(a => 
+          a.activity_type === 'commit' && 
+          new Date(a.occurred_at).toDateString() === dateStr
+        ).length;
+        
         weekData.push(commits);
       }
-      data.push(weekData);
+      data.push(weekData.reverse());
     }
-    return data;
+    return data.reverse();
   };
 
   const heatmapData = generateHeatmapData();
